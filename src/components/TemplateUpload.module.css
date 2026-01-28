@@ -1,0 +1,602 @@
+.container {
+  max-width: 1400px;
+  margin: 0 2.5rem;
+  padding: 2rem 0 2rem 0;
+  display: flex;
+  gap: 2.5rem;
+  align-items: flex-start;
+}
+
+.pageHeader {
+  margin: 1.5rem 2.5rem 0.5rem 2.5rem;
+  color: #f9fafb;
+}
+
+.pageHeader h1 {
+  margin: 0 0 0.3rem 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.pageHeader p {
+  margin: 0;
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+
+.sidebar {
+  flex: 0 0 360px;
+}
+
+.mainContent {
+  flex: 1;
+  min-height: 400px;
+}
+
+.selectedInfo {
+  background: rgba(15, 23, 42, 0.55);
+  border-radius: 14px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(148, 163, 184, 0.65);
+  color: #e5e7eb;
+}
+
+.selectedInfo h2 {
+  margin: 0 0 0.35rem 0;
+  font-size: 1rem;
+}
+
+.selectedFile {
+  margin: 0;
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+.howToCard {
+  margin-top: 1.5rem;
+  padding: 1.2rem 1.3rem;
+  border-radius: 14px;
+  background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.3), transparent 60%),
+              radial-gradient(circle at bottom right, rgba(244, 114, 182, 0.35), transparent 60%),
+              rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(148, 163, 184, 0.75);
+  color: #f9fafb;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  box-shadow: 0 14px 28px rgba(15, 23, 42, 0.55);
+}
+
+.howToCard h4 {
+  margin: 0 0 0.8rem 0;
+  font-size: 0.98rem;
+}
+
+.howToCard ol {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+
+.howToCard li + li {
+  margin-top: 0.4rem;
+}
+
+/* Top configuration card shown in the sidebar */
+.configPanel {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.08));
+  color: #f7fafc;
+  padding: 1.5rem 1.75rem;
+  border-radius: 16px;
+  margin-bottom: 2rem;
+  box-shadow: 0 18px 35px rgba(15, 23, 42, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(18px);
+}
+
+.configPanel h3 {
+  margin: 0 0 1.25rem 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.configGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.configGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Individual rows inside the configuration card */
+.configSection {
+  margin-bottom: 1rem;
+}
+
+.configSection:last-of-type {
+  margin-bottom: 0;
+}
+
+.configLabel {
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.9;
+}
+
+/* Compact, pill‑style selects used in the config card */
+.configSelect {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(15, 23, 42, 0.18);
+  color: #f9fafb;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, transform 0.05s ease;
+}
+
+.configSelect option {
+  color: #1a202c;
+}
+
+.configSelect:hover {
+  border-color: rgba(255, 255, 255, 0.75);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.22);
+}
+
+.configSelect:focus {
+  outline: none;
+  border-color: #fbbf24;
+  box-shadow: 0 0 0 2px rgba(251, 191, 36, 0.65);
+  background: rgba(15, 23, 42, 0.32);
+}
+
+.header {
+  margin-bottom: 1.5rem;
+}
+
+.header h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+  color: #1a202c;
+}
+
+.header p {
+  margin: 0;
+  color: #718096;
+}
+
+.templateSelector {
+  margin-bottom: 2rem;
+}
+
+.label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #2d3748;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.select:hover {
+  border-color: #cbd5e0;
+}
+
+.select:focus {
+  outline: none;
+  border-color: #4299e1;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+}
+
+.selectedTemplateSection {
+  margin-bottom: 2rem;
+}
+
+.templateCard {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.templateHeader {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #f7fafc;
+}
+
+.templateHeader h3 {
+  margin: 0 0 0.5rem 0;
+  color: #1a202c;
+  font-size: 1.25rem;
+}
+
+.templateFileName {
+  margin: 0;
+  color: #718096;
+  font-size: 0.875rem;
+}
+
+.fieldsSection h4 {
+  margin: 0 0 1.5rem 0;
+  color: #c9c9c9;
+  font-size: 1.1rem;
+}
+
+.formFields {
+  display: grid;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.fieldLabel {
+  margin-bottom: 0.5rem;
+  color: #c9c9c9;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.input,
+.textarea {
+  padding: 0.75rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.input:hover,
+.textarea:hover {
+  border-color: #cbd5e0;
+}
+
+.input:focus,
+.textarea:focus {
+  outline: none;
+  border-color: #4299e1;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.wordCount {
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  color: #718096;
+}
+
+.generateSection {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.generateBtn {
+  padding: 1rem 3rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.generateBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.generateBtn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.generateBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.noTags {
+  color: #a0aec0;
+  text-align: center;
+  padding: 2rem;
+  font-style: italic;
+}
+
+/* Tag guide used under the configuration card */
+.tagGuide {
+  background: rgba(15, 23, 42, 0.24);
+  border-radius: 12px;
+  padding: 1rem 1.1rem;
+  margin-top: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.tagGuide h4 {
+  margin: 0 0 0.75rem 0;
+  color: #e5e7eb;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.tagGuideContent {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.tagGuideSection strong {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #1a202c;
+}
+
+.tagGuideSection ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tagGuideSection li {
+  padding: 0.5rem 0;
+  color: #4a5568;
+  font-size: 0.9rem;
+}
+
+.tagGuideSection code {
+  background: #e2e8f0;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  color: #2d3748;
+  font-family: 'Courier New', monospace;
+}
+
+.divider {
+  text-align: center;
+  color: #a0aec0;
+  margin: 3rem 0;
+  position: relative;
+  font-weight: 500;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 40%;
+  height: 1px;
+  background: #e2e8f0;
+}
+
+.divider::before {
+  left: 0;
+}
+
+.divider::after {
+  right: 0;
+}
+
+.dropzone {
+  border: 3px dashed #cbd5e0;
+  border-radius: 12px;
+  padding: 3rem;
+  text-align: center;
+  transition: all 0.3s;
+  cursor: pointer;
+  background: #f7fafc;
+}
+
+.dropzone:hover {
+  border-color: #4299e1;
+  background: #edf2f7;
+}
+
+.dragActive {
+  border-color: #4299e1;
+  background: #ebf8ff;
+}
+
+.uploadLabel {
+  cursor: pointer;
+  display: block;
+}
+
+.uploadIcon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.uploadText {
+  margin: 0.5rem 0;
+  font-size: 1.1rem;
+  color: #2d3748;
+  font-weight: 600;
+}
+
+.uploadSubtext {
+  margin: 0;
+  color: #718096;
+  font-size: 0.9rem;
+}
+
+.templatesList {
+  margin-top: 2rem;
+}
+
+.templatesList h4 {
+  margin-bottom: 1rem;
+  color: #2d3748;
+}
+
+.templatesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.templateCard {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1rem;
+  display: flex;
+  gap: 1rem;
+  position: relative;
+  transition: all 0.2s;
+}
+
+.templateCard:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.templateIcon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.templateInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.templateName {
+  margin: 0 0 0.25rem 0;
+  font-weight: 600;
+  color: #1a202c;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.templateSize,
+.templateDate {
+  margin: 0.25rem 0;
+  font-size: 0.875rem;
+  color: #718096;
+}
+
+.tagsContainer {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.tagsLabel {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #4a5568;
+}
+
+.tagsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tag {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  background: #edf2f7;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  color: #4a5568;
+  font-weight: 500;
+}
+
+.tag_text {
+  background: #e6fffa;
+  color: #234e52;
+}
+
+.tag_number {
+  background: #fef5e7;
+  color: #7d6608;
+}
+
+.tag_date {
+  background: #e3f2fd;
+  color: #0d47a1;
+}
+
+.tag_text_dropdown,
+.tag_number_dropdown,
+.tag_date_dropdown {
+  background: #f3e5f5;
+  color: #4a148c;
+}
+
+.deleteBtn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  background: #fed7d7;
+  color: #c53030;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.deleteBtn:hover {
+  background: #fc8181;
+  color: white;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 3rem;
+  color: #a0aec0;
+}
+
+.emptyState p {
+  margin: 0.5rem 0;
+}
+
+.emptySubtext {
+  font-size: 0.9rem;
+}

@@ -1,0 +1,234 @@
+/* =========================
+   Design Tokens
+========================= */
+:root {
+  --bg: #f8fafc;
+  --card: #ffffff;
+  --border: #e2e8f0;
+  --text: #1e293b;
+  --muted: #64748b;
+  --primary: #6366f1;
+  --primary-hover: #4f46e5;
+  --radius: 12px;
+}
+
+/* =========================
+   Page Layout
+========================= */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 2rem;
+  background: var(--bg);
+}
+
+/* =========================
+   Header
+========================= */
+.pageHeader {
+  grid-column: 1 / -1;
+  margin-bottom: 0.5rem;
+}
+
+.pageHeader h1 {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.pageHeader p {
+  margin-top: 0.25rem;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+/* =========================
+   Sidebar
+========================= */
+.sidebar {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  height: fit-content;
+}
+
+/* =========================
+   Sidebar Sections
+========================= */
+.configPanel {
+  margin-bottom: 2rem;
+}
+
+.configPanel h3 {
+  margin: 0 0 1rem 0;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.configSection {
+  margin-bottom: 1rem;
+}
+
+.configLabel {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* =========================
+   Sidebar Selects
+========================= */
+.configSelect {
+  width: 100%;
+  padding: 0.6rem 0.7rem;
+  font-size: 0.85rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: #ffffff;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.configSelect:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(99,102,241,0.15);
+}
+
+/* =========================
+   Tag Guide
+========================= */
+.tagGuide {
+  border-top: 1px solid var(--border);
+  padding-top: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+.tagGuide h4 {
+  margin-bottom: 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.tagGuide ul {
+  margin: 0;
+  padding-left: 1rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.tagGuide li + li {
+  margin-top: 0.4rem;
+}
+
+/* =========================
+   Main Content
+========================= */
+.mainContent {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  min-height: 400px;
+}
+
+/* =========================
+   Selected Template Card
+========================= */
+.selectedInfo {
+  margin-bottom: 1.5rem;
+}
+
+.selectedInfo h2 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.selectedFile {
+  margin-top: 0.25rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+/* =========================
+   Empty / No Tags
+========================= */
+.noTags,
+.emptyState {
+  padding: 3rem 2rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--muted);
+  border: 2px dashed var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+}
+
+/* =========================
+   Divider
+========================= */
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 2rem 0;
+}
+
+/* =========================
+   Buttons
+========================= */
+.generateBtn {
+  width: 100%;
+  max-width: 420px;
+  margin: 2rem auto 0;
+  padding: 0.85rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #ffffff;
+  background: var(--primary);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.05s ease;
+}
+
+.generateBtn:hover:not(:disabled) {
+  background: var(--primary-hover);
+}
+
+.generateBtn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.generateBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* =========================
+   Mobile
+========================= */
+@media (max-width: 900px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    order: 2;
+  }
+
+  .mainContent {
+    order: 1;
+  }
+}

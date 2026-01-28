@@ -1,0 +1,313 @@
+/* =========================
+   Sidebar Tokens (Enhanced with Mild Colors)
+========================= */
+:root {
+  --blue: #0b1c3d;
+  --blue-medium: #1e3a5f;
+  --blue-soft: rgba(11, 28, 61, 0.05);
+  --blue-border: rgba(11, 28, 61, 0.14);
+  --white: #ffffff;
+  --cream: #fefdfb;
+  --sage: #e8f3f0;
+  --lavender: #f3f1ff;
+  --peach: #fff5f0;
+  --mint: #f0fdf9;
+  --sky: #f0f9ff;
+  --warm-gray: #f9fafb;
+  --accent-green: #10b981;
+  --accent-purple: #8b5cf6;
+  --accent-orange: #f59e0b;
+  --accent-teal: #14b8a6;
+  --radius: 12px;
+}
+
+/* =========================
+   Sidebar Container
+========================= */
+.sidebar {
+  width: 100%;
+  background: linear-gradient(180deg, #fefdfb 0%, #f0f9ff 100%);
+  border: 1px solid var(--blue-border);
+  border-radius: var(--radius);
+  overflow-y: auto;
+  max-height: calc(100vh - 80px);
+  box-shadow: 0 2px 8px rgba(11, 28, 61, 0.04);
+}
+
+/* =========================
+   Inner Container
+========================= */
+.container {
+  padding: 1.5rem;
+}
+
+/* =========================
+   Section Card (Alternating Mild Backgrounds)
+========================= */
+.section {
+  margin-bottom: 1.75rem;
+  padding: 1.25rem 1.25rem 1.25rem 1rem;
+  background: var(--sage);
+  border-left: 4px solid var(--accent-teal);
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(11, 28, 61, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.section:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(11, 28, 61, 0.1);
+}
+
+/* Alternating section colors */
+.section:nth-child(odd) {
+  background: var(--sage);
+  border-left-color: var(--accent-teal);
+}
+
+.section:nth-child(even) {
+  background: var(--lavender);
+  border-left-color: var(--accent-purple);
+}
+
+.section:nth-child(3n) {
+  background: var(--peach);
+  border-left-color: var(--accent-orange);
+}
+
+.section:nth-child(4n) {
+  background: var(--mint);
+  border-left-color: var(--accent-green);
+}
+
+/* =========================
+   Section Titles
+========================= */
+.section h2 {
+  margin: 0 0 1rem 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--blue);
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.section h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 40px;
+  height: 2px;
+  background: currentColor;
+  opacity: 0.3;
+}
+
+.section h3,
+.configSection h3 {
+  margin: 0 0 0.4rem 0;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--blue-medium);
+}
+
+/* =========================
+   Config Sections
+========================= */
+.configSection {
+  margin-bottom: 1.15rem;
+}
+
+/* =========================
+   Select
+========================= */
+.select {
+  width: 100%;
+  padding: 0.65rem 0.75rem;
+  font-size: 0.85rem;
+  border-radius: 8px;
+  border: 1px solid var(--blue-border);
+  background: linear-gradient(180deg, #ffffff 0%, #fafbfc 100%);
+  color: var(--blue);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.select:hover {
+  border-color: var(--blue-medium);
+  background: #ffffff;
+}
+
+.select:focus {
+  outline: none;
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(11, 28, 61, 0.12);
+  background: #ffffff;
+}
+
+/* =========================
+   Disabled / Readonly States
+========================= */
+.select:disabled,
+.select[aria-disabled='true'],
+.sidebar input:disabled {
+  opacity: 1 !important;
+  background: rgba(11, 28, 61, 0.04) !important;
+  color: rgba(11, 28, 61, 0.6) !important;
+  border-color: var(--blue-border) !important;
+  cursor: not-allowed;
+}
+
+.select:disabled option {
+  color: var(--blue);
+}
+
+/* =========================
+   Text Visibility Hard Fix
+========================= */
+.sidebar,
+.sidebar * {
+  color: var(--blue);
+}
+
+.sidebar select,
+.sidebar input,
+.sidebar label,
+.sidebar span,
+.sidebar p {
+  opacity: 1 !important;
+}
+
+/* =========================
+   Helper / Description Text
+========================= */
+.section p,
+.section span,
+.section li {
+  font-size: 0.85rem;
+  color: rgba(11, 28, 61, 0.75);
+  line-height: 1.5;
+}
+
+/* =========================
+   Radio Group
+========================= */
+.radioGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.radioGroup label {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.55rem 0.6rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.radioGroup label:hover {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(11, 28, 61, 0.15);
+  transform: translateX(2px);
+}
+
+.radioGroup input[type='radio'] {
+  margin: 0;
+  cursor: pointer;
+  accent-color: var(--blue);
+  width: 16px;
+  height: 16px;
+}
+
+.radioGroup input[type='radio']:checked + span {
+  font-weight: 600;
+}
+
+/* =========================
+   Divider
+========================= */
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--blue-border) 50%, transparent 100%);
+  margin: 1.25rem 0;
+}
+
+/* =========================
+   Guide Box
+========================= */
+.guide {
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px dashed rgba(11, 28, 61, 0.2);
+  background: linear-gradient(135deg, #ffffff 0%, var(--sky) 100%);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  position: relative;
+  overflow: hidden;
+}
+
+.guide::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(180deg, var(--accent-teal) 0%, var(--accent-purple) 100%);
+}
+
+.guide h4 {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--blue-medium);
+}
+
+.guide ul {
+  margin: 0.5rem 0 0 0;
+  padding-left: 1.1rem;
+}
+
+.guide li {
+  margin: 0.35rem 0;
+}
+
+.guide li::marker {
+  color: var(--accent-teal);
+}
+
+.guide code {
+  background: rgba(139, 92, 246, 0.1);
+  color: var(--blue);
+  padding: 0.2rem 0.45rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  border: 1px solid rgba(139, 92, 246, 0.15);
+}
+
+/* =========================
+   Mobile
+========================= */
+@media (max-width: 768px) {
+  .sidebar {
+    max-height: none;
+    border-radius: 0;
+  }
+
+  .container {
+    padding: 1.25rem 1rem;
+  }
+  
+  .section:hover {
+    transform: none;
+  }
+}
