@@ -46,8 +46,8 @@ export default function TemplateUpload(_: TemplateUploadProps) {
   const [generating, setGenerating] = useState(false);
   const [loadingTemplate, setLoadingTemplate] = useState(false);
  
-  // Configuration state
-  const [selectedDateFormat, setSelectedDateFormat] = useState<string>("January 27, 2026 (Full)");
+  // Configuration state - removed global date format
+  const [dateFormats, setDateFormats] = useState<Record<string, string>>({}); // Individual date formats per field
   const [selectedDecimalPlaces, setSelectedDecimalPlaces] = useState<number>(0);
 
   // Load available templates from public folder on component mount
@@ -260,6 +260,7 @@ export default function TemplateUpload(_: TemplateUploadProps) {
       setSelectedTemplateIndex(-1);
       setFormValues({});
       setWordCounts({});
+      setDateFormats({});
       return;
     }
 
@@ -305,17 +306,26 @@ export default function TemplateUpload(_: TemplateUploadProps) {
       
       setSelectedTemplateIndex(index);
       
-      // Initialize form values
+      // Initialize form values and date formats
       const initialValues: Record<string, any> = {};
+      const initialDateFormats: Record<string, string> = {};
+      
       extractedTags.forEach((tag: ExtractedTag) => {
         if (tag.type.includes('dropdown') && tag.options && tag.options.length > 0) {
           initialValues[tag.name] = tag.options[0];
         } else {
           initialValues[tag.name] = '';
         }
+        
+        // Initialize date format for each date field
+        if (tag.type === 'date' || tag.type === 'date_dropdown') {
+          initialDateFormats[tag.name] = "January 27, 2026 (Full)"; // Default format
+        }
       });
+      
       setFormValues(initialValues);
       setWordCounts({});
+      setDateFormats(initialDateFormats);
     } catch (error) {
       console.error('Error loading template:', error);
       alert(`Failed to load template: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -404,6 +414,11 @@ export default function TemplateUpload(_: TemplateUploadProps) {
     }
   };
 
+  // Handle date format change for a specific field
+  const handleDateFormatChange = (fieldName: string, format: string) => {
+    setDateFormats(prev => ({ ...prev, [fieldName]: format }));
+  };
+
   // Generate document
   const handleGenerateDocument = async () => {
     if (!selectedTemplate) return;
@@ -425,7 +440,13 @@ export default function TemplateUpload(_: TemplateUploadProps) {
         const value = formValues[field.name];
         
         if (field.type === 'date') {
-          processedReplacements[field.name] = formatDateValue(value, selectedDateFormat);
+          // Use the specific date format for this field
+          const fieldFormat = dateFormats[field.name] || "January 27, 2026 (Full)";
+          processedReplacements[field.name] = formatDateValue(value, fieldFormat);
+        } else if (field.type === 'date_dropdown') {
+          // For date dropdowns, also use field-specific format
+          const fieldFormat = dateFormats[field.name] || "January 27, 2026 (Full)";
+          processedReplacements[field.name] = formatDateValue(value, fieldFormat);
         } else if (field.type === 'number') {
           processedReplacements[field.name] = formatNumberValue(value, selectedDecimalPlaces);
         } else if (field.type === 'number_dropdown') {
@@ -467,48 +488,54 @@ export default function TemplateUpload(_: TemplateUploadProps) {
   };
 
   // Generate document from template by replacing tags
-  const generateDocumentFromTemplate = async (
-    templateArrayBuffer: ArrayBuffer,
-    replacements: Record<string, string>
-  ): Promise<ArrayBuffer> => {
-    const JSZip = (await import('jszip')).default;
-    
-    const zip = new JSZip();
-    await zip.loadAsync(templateArrayBuffer);
-    
-    const docXml = await zip.file('word/document.xml')?.async('string');
-    if (!docXml) throw new Error('Could not find document.xml');
-    
-    let modifiedXml = docXml;
-    
-    // Replace tags in the XML
-    for (const [tag, value] of Object.entries(replacements)) {
-      const valueStr = String(value);
-      const escapedTag = tag.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      
-      // Replace all bracket variations
-      const tripleWithOptions = new RegExp(`\\{\\{\\{${escapedTag}/[^}]+\\}\\}\\}`, 'g');
-      modifiedXml = modifiedXml.replace(tripleWithOptions, valueStr);
-      const triplePattern = new RegExp(`\\{\\{\\{${escapedTag}\\}\\}\\}`, 'g');
-      modifiedXml = modifiedXml.replace(triplePattern, valueStr);
-      
-      const doubleWithOptions = new RegExp(`\\{\\{${escapedTag}/[^}]+\\}\\}`, 'g');
-      modifiedXml = modifiedXml.replace(doubleWithOptions, valueStr);
-      const doublePattern = new RegExp(`\\{\\{${escapedTag}\\}\\}`, 'g');
-      modifiedXml = modifiedXml.replace(doublePattern, valueStr);
-      
-      const singleWithOptions = new RegExp(`\\{${escapedTag}/[^}]+\\}`, 'g');
-      modifiedXml = modifiedXml.replace(singleWithOptions, valueStr);
-      const singlePattern = new RegExp(`\\{${escapedTag}\\}`, 'g');
-      modifiedXml = modifiedXml.replace(singlePattern, valueStr);
-    }
-    
-    zip.file('word/document.xml', modifiedXml);
-    
-    const newDocx = await zip.generateAsync({ type: 'arraybuffer' });
-    return newDocx;
-  };
+const generateDocumentFromTemplate = async (
+  templateArrayBuffer: ArrayBuffer,
+  replacements: Record<string, string>
+): Promise<ArrayBuffer> => {
+  const JSZip = (await import('jszip')).default;
 
+  const zip = new JSZip();
+  await zip.loadAsync(templateArrayBuffer);
+
+  let docXml = await zip.file('word/document.xml')?.async('string');
+  if (!docXml) throw new Error('Could not find document.xml');
+
+  /**
+   * ✅ Replace ONLY non-empty paragraphs
+   * ✅ Preserve <w:p/> empty paragraphs (blank lines)
+   */
+  docXml = docXml.replace(
+    /<w:p(?!\/>)[\s\S]*?<\/w:p>/g,
+    (paragraphXml) => {
+      const textMatches = [...paragraphXml.matchAll(/<w:t[^>]*>([\s\S]*?)<\/w:t>/g)];
+      let paragraphText = textMatches.map(m => m[1]).join('');
+
+      for (const [tag, value] of Object.entries(replacements)) {
+        const escapedTag = tag.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const v = String(value);
+
+        paragraphText = paragraphText
+          .replace(new RegExp(`\\{\\{\\{${escapedTag}\\/[^}]+\\}\\}\\}`, 'g'), v)
+          .replace(new RegExp(`\\{\\{\\{${escapedTag}\\}\\}\\}`, 'g'), v)
+          .replace(new RegExp(`\\{\\{${escapedTag}\\/[^}]+\\}\\}`, 'g'), v)
+          .replace(new RegExp(`\\{\\{${escapedTag}\\}\\}`, 'g'), v)
+          .replace(new RegExp(`\\{${escapedTag}\\/[^}]+\\}`, 'g'), v)
+          .replace(new RegExp(`\\{${escapedTag}\\}`, 'g'), v);
+      }
+
+      return `
+        <w:p>
+          <w:r>
+            <w:t xml:space="preserve">${paragraphText}</w:t>
+          </w:r>
+        </w:p>
+      `;
+    }
+  );
+  
+  zip.file('word/document.xml', docXml);
+  return await zip.generateAsync({ type: 'arraybuffer' });
+};
   // Upload-related logic and handlers removed along with upload UI.
 
   return (
@@ -524,23 +551,7 @@ export default function TemplateUpload(_: TemplateUploadProps) {
         <div className={styles.configPanel}>
           <h3>⚙️ Configuration</h3>
           
-          <div className={styles.configSection}>
-            <label htmlFor="dateFormat" className={styles.configLabel}>
-              📅 DATE FORMAT
-            </label>
-            <select
-              id="dateFormat"
-              value={selectedDateFormat}
-              onChange={(e) => setSelectedDateFormat(e.target.value)}
-              className={styles.configSelect}
-            >
-              {Object.keys(DATE_FORMATS).map((format) => (
-                <option key={format} value={format}>
-                  {format}
-                </option>
-              ))}
-            </select>
-          </div>
+          {/* Removed global date format selector */}
           
           <div className={styles.configSection}>
             <label htmlFor="decimalPlaces" className={styles.configLabel}>
@@ -641,14 +652,16 @@ export default function TemplateUpload(_: TemplateUploadProps) {
               <h4>📘 How to use this application</h4>
               <ol>
                 <li>
-                  Choose your preferred <strong>Date Format</strong> and <strong>Decimal Places</strong> above.
+                  Choose your preferred <strong>Decimal Places</strong> above.
                 </li>
                 <li>
                   Under <strong>Select Questionnaire</strong>, pick an NBFC category to load the questions.
                 </li>
                 <li>
-                  Fill in all the fields that appear on the right and click <strong>Generate Report</strong> to
-                  download the Word file.
+                  Fill in all the fields that appear on the right. For date fields, select your preferred format.
+                </li>
+                <li>
+                  Click <strong>Generate Report</strong> to download the Word file.
                 </li>
               </ol>
             </div>
@@ -677,6 +690,7 @@ export default function TemplateUpload(_: TemplateUploadProps) {
                 const isLargeTextField = field.type === 'text' && 
                   ['address', 'description', 'scope', 'services'].some(key => field.name.toLowerCase().includes(key));
                 const wordCount = wordCounts[field.name] || 0;
+                const isDateField = field.type === 'date' || field.type === 'date_dropdown';
                 
                 return (
                   <div key={idx} className={styles.formGroup}>
@@ -732,13 +746,32 @@ export default function TemplateUpload(_: TemplateUploadProps) {
                     )}
 
                     {field.type === 'date' && (
-                      <input
-                        id={`field_${field.name}`}
-                        type="date"
-                        value={formValues[field.name] || ''}
-                        onChange={(e) => handleFormChange(field.name, e.target.value, field.type)}
-                        className={styles.input}
-                      />
+                      <>
+                        <input
+                          id={`field_${field.name}`}
+                          type="date"
+                          value={formValues[field.name] || ''}
+                          onChange={(e) => handleFormChange(field.name, e.target.value, field.type)}
+                          className={styles.input}
+                        />
+                        <div className={styles.dateFormatSelector}>
+                          <label htmlFor={`format_${field.name}`} className={styles.dateFormatLabel}>
+                            📅 Format:
+                          </label>
+                          <select
+                            id={`format_${field.name}`}
+                            value={dateFormats[field.name] || "January 27, 2026 (Full)"}
+                            onChange={(e) => handleDateFormatChange(field.name, e.target.value)}
+                            className={styles.dateFormatSelect}
+                          >
+                            {Object.keys(DATE_FORMATS).map((format) => (
+                              <option key={format} value={format}>
+                                {format}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </>
                     )}
 
                     {field.type === 'text_dropdown' && field.options && (
@@ -778,21 +811,40 @@ export default function TemplateUpload(_: TemplateUploadProps) {
                     )}
 
                     {field.type === 'date_dropdown' && field.options && (
-                      <select
-                        id={`field_${field.name}`}
-                        value={formValues[field.name] || (field.options[0] || '')}
-                        onChange={(e) => handleFormChange(field.name, e.target.value, field.type)}
-                        className={styles.input}
-                      >
-                        {field.options.map((option, optIdx) => {
-                          const cleanOpt = cleanOptionValue(option);
-                          return (
-                            <option key={optIdx} value={cleanOpt}>
-                              {cleanOpt}
-                            </option>
-                          );
-                        })}
-                      </select>
+                      <>
+                        <select
+                          id={`field_${field.name}`}
+                          value={formValues[field.name] || (field.options[0] || '')}
+                          onChange={(e) => handleFormChange(field.name, e.target.value, field.type)}
+                          className={styles.input}
+                        >
+                          {field.options.map((option, optIdx) => {
+                            const cleanOpt = cleanOptionValue(option);
+                            return (
+                              <option key={optIdx} value={cleanOpt}>
+                                {cleanOpt}
+                              </option>
+                            );
+                          })}
+                        </select>
+                        <div className={styles.dateFormatSelector}>
+                          <label htmlFor={`format_${field.name}`} className={styles.dateFormatLabel}>
+                            📅 Format:
+                          </label>
+                          <select
+                            id={`format_${field.name}`}
+                            value={dateFormats[field.name] || "January 27, 2026 (Full)"}
+                            onChange={(e) => handleDateFormatChange(field.name, e.target.value)}
+                            className={styles.dateFormatSelect}
+                          >
+                            {Object.keys(DATE_FORMATS).map((format) => (
+                              <option key={format} value={format}>
+                                {format}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </>
                     )}
                   </div>
                 );
