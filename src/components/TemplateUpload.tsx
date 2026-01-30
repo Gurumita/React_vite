@@ -690,7 +690,7 @@ const generateDocumentFromTemplate = async (
                 const isLargeTextField = field.type === 'text' && 
                   ['address', 'description', 'scope', 'services'].some(key => field.name.toLowerCase().includes(key));
                 const wordCount = wordCounts[field.name] || 0;
-                const isDateField = field.type === 'date' || field.type === 'date_dropdown';
+                //const isDateField = field.type === 'date' || field.type === 'date_dropdown';
                 
                 return (
                   <div key={idx} className={styles.formGroup}>
